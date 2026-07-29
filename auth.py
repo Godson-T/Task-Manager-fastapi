@@ -1,6 +1,7 @@
 from passlib.context import CryptContext
 from jose import jwt
 from datetime import datetime, timedelta
+from fastapi import Header,HTTPException,Request 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 SECRET_KEY = "your-secret-key-change-this"
 ALGORITHM = "HS256"
@@ -15,5 +16,35 @@ def hash_password(password: str) -> str:
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
+
+def verify_token(Authorization:str =Header(...) ):
+    token=Authorization.replace("Bearer","")
+    try:
+        payload=jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+        username=payload.get('sub')
+        if not username:
+            raise HTTPException(status_code=401,detail="invalid token")
+        return username
+    except:
+        raise HTTPException(status_code=401,detail="Invalid token")
+        
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

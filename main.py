@@ -2,7 +2,7 @@ from fastapi import FastAPI,Depends,HTTPException,Request
 from sqlalchemy.orm import Session
 from database import engine,get_db
 import models,schemas
-from auth import hash_password
+from auth import hash_password,verify_token
 from auth import verify_password, create_access_token
 from fastapi.templating import Jinja2Templates
 
@@ -19,7 +19,9 @@ def root(request:Request):
     )
 
 @app.post("/task")
-def create_task(task:schemas.TaskCreate,db:Session=Depends(get_db)):
+def create_task(task: schemas.TaskCreate, 
+                db: Session = Depends(get_db),
+                current_user: str = Depends(verify_token)):
     db_task=models.Task(
         title=task.title,
         description=task.description,
