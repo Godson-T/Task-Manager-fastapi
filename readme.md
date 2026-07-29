@@ -1,15 +1,15 @@
-# Backend Learning
+﻿# Backend Learning
 
 A FastAPI-based task management app for learning backend development concepts such as REST APIs, SQLAlchemy, authentication, templates, and database persistence.
 
 ## Overview
 
-This project demonstrates how to build a small full-stack-style backend with:
+This project demonstrates how to build a small backend with:
 - FastAPI for API routes
 - SQLAlchemy for ORM-based database access
 - SQLite for local persistence
 - JWT-based authentication
-- Jinja2 templates for rendering basic HTML pages
+- Jinja2 templates for a simple home page
 
 ## Current Features
 
@@ -17,34 +17,34 @@ This project demonstrates how to build a small full-stack-style backend with:
 - User registration and login
 - Password hashing with bcrypt
 - JWT access token generation
-- HTML templates for the landing, login, and registration pages
-- Pydantic request validation
+- Basic home page rendered with Jinja2
+- Pydantic request validation for task payloads
 
 ## Project Structure
 
 - `main.py` - FastAPI app, routes, and template rendering
-- `models.py` - SQLAlchemy database models for tasks and users
-- `schemas.py` - Pydantic schemas for task input validation
-- `database.py` - Database engine, session factory, and dependency injection
-- `auth.py` - Password hashing and JWT token helpers
+- `models.py` - SQLAlchemy models for tasks and users
+- `schemas.py` - Pydantic schema for task input validation
+- `database.py` - Database engine, session factory, and dependency helper
+- `auth.py` - Password hashing, JWT creation, and token verification
 - `templates/` - HTML files for the frontend views
-- `tasks.db` - SQLite database created automatically on startup
+- `tasks.db` - SQLite database file created automatically on first run
 
 ## Getting Started
 
 1. Create and activate a virtual environment:
-   ```bash
+   ```powershell
    python -m venv backendlearning
    backendlearning\Scripts\activate
    ```
 
 2. Install dependencies:
-   ```bash
-   pip install fastapi sqlalchemy python-dotenv pydantic email-validator passlib python-jose jinja2 uvicorn
+   ```powershell
+   pip install fastapi sqlalchemy pydantic passlib[bcrypt] python-jose jinja2 uvicorn
    ```
 
 3. Run the development server:
-   ```bash
+   ```powershell
    uvicorn main:app --reload
    ```
 
@@ -52,15 +52,21 @@ This project demonstrates how to build a small full-stack-style backend with:
 
 ### Tasks
 - `GET /` - Renders the home page template
-- `POST /task` - Create a new task
+- `POST /task` - Create a new task (requires `Authorization: Bearer <token>` header)
 - `GET /task` - Get all tasks
 - `GET /task/{task_id}` - Get a specific task by ID
 - `PUT /task/{task_id}` - Update a task
 - `DELETE /task/{task_id}` - Delete a task
 
 ### Authentication
-- `POST /register` - Register a new user
+- `POST /register` - Register a new user with `username` and `password`
 - `POST /login` - Log in a user and return a JWT access token
+
+## Authentication Notes
+
+- The `POST /task` route requires a valid JWT access token in the `Authorization` header.
+- The token is created by `auth.py` and expires after 24 hours.
+- In a production app, replace `SECRET_KEY` in `auth.py` with a secure, environment-driven secret.
 
 ## Data Models
 
@@ -78,7 +84,8 @@ This project demonstrates how to build a small full-stack-style backend with:
 ## Notes
 
 - The application uses SQLite, so no separate database server is required.
-- The secret key in `auth.py` should be replaced with a stronger value in a real application.
+- The `SECRET_KEY` in `auth.py` should be replaced with a stronger value in a real application.
+- The current app stores tasks without user ownership metadata.
 
 ## License
 
