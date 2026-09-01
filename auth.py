@@ -18,7 +18,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 def verify_token(Authorization:str =Header(...) ):
-    token=Authorization.replace("Bearer","")
+    token=Authorization.replace("Bearer ", "")
     try:
         payload=jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
         username=payload.get('sub')

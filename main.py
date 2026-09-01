@@ -32,12 +32,12 @@ def create_task(task: schemas.TaskCreate,
     db.refresh(db_task)
     return db_task
 @app.get("/task")
-def get_tasks(db:Session=Depends(get_db)):
+def get_tasks(db:Session=Depends(get_db),current_user: str = Depends(verify_token)):
     tasks=db.query(models.Task).all()
     return tasks
 
 @app.get("/task/{task_id}")
-def get_single_task(task_id: int,db:Session=Depends(get_db)):
+def get_single_task(task_id: int,db:Session=Depends(get_db),current_user: str = Depends(verify_token)):
     task=db.query(models.Task).filter(
         models.Task.id== task_id
     ).first()
@@ -50,7 +50,8 @@ def get_single_task(task_id: int,db:Session=Depends(get_db)):
 def edit_task(
     task_id: int,
     updated_task: schemas.TaskCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: str = Depends(verify_token)
 ):
     task = db.query(models.Task).filter(
         models.Task.id == task_id
@@ -70,7 +71,8 @@ def edit_task(
 @app.delete("/task/{task_id}")
 def delete_task(
     task_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: str = Depends(verify_token)
 ):
     task = db.query(models.Task).filter(
         models.Task.id == task_id
