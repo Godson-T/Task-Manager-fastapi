@@ -2,8 +2,12 @@ from passlib.context import CryptContext
 from jose import jwt
 from datetime import datetime, timedelta
 from fastapi import Header,HTTPException,Request 
+from dotenv import load_dotenv
+import os
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-SECRET_KEY = "your-secret-key-change-this"
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
 def create_access_token(username: str):
