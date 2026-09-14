@@ -86,7 +86,11 @@ This project demonstrates how to build a small backend with:
 - The application uses SQLite, so no separate database server is required.
 - The `SECRET_KEY` in `auth.py` should be replaced with a stronger value in a real application.
 - The current app stores tasks without user ownership metadata.
+## Live Demo
 
+[Task Manager API](https://task-manager-fastapi-g3y3.onrender.com)
+
+[API Documentation (Swagger UI)](https://task-manager-fastapi-g3y3.onrender.com/docs)
 ## License
 
 This project is intended for learning and personal use.
