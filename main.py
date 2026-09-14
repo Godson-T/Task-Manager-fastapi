@@ -1,5 +1,5 @@
-from fastapi import FastAPI,Depends,HTTPException,Request 
-from sqlalchemy.orm import Session
+from fastapi import FastAPI,Depends,HTTPException,Request,Form
+from sqlalchemy.orm import Session,declarative_base
 from database import engine,get_db
 import models,schemas
 from auth import hash_password,verify_token
@@ -96,7 +96,8 @@ def register(username: str, password: str, db: Session = Depends(get_db)):
 
 
 @app.post("/login")
-def login(username: str, password: str, db: Session = Depends(get_db)):
+def login(username: str=Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+
     user = db.query(models.User).filter(models.User.username == username).first()
     
     if not user or not verify_password(password, user.hashed_password):

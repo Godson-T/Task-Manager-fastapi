@@ -1,6 +1,6 @@
-﻿# Backend Learning
+﻿# FastAPI Task Manager API
 
-A FastAPI-based task management app for learning backend development concepts such as REST APIs, SQLAlchemy, authentication, templates, and database persistence.
+A FastAPI-based task management app for learning backend development concepts such as SQLAlchemy, authentication, templates, and database .
 
 ## Overview
 
