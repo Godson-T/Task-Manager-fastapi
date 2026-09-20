@@ -17,12 +17,16 @@ def root(request:Request):
         request=request,
         name="index.html"
     )
-
+@app.get("/login")
+def login_page(request: Request):
+    return templates.TemplateResponse(request=request,name="login.html")
 @app.post("/task")
 def create_task(task: schemas.TaskCreate, 
                 db: Session = Depends(get_db),
                 current_user: str = Depends(verify_token)):
+    user=db.query(models.User).filter(models.User.username==current_user).first()
     db_task=models.Task(
+        user_id=user.id,
         title=task.title,
         description=task.description,
         completed=task.completed

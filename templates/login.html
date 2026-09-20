@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <title>Login Page</title>
@@ -6,7 +6,7 @@
 </head>
 <body>
     <div class="login-container">
-        <form action="/login" method="POST">
+        <form id="login-form" >
             <h2>Login</h2>
             <div class="input-group">
                 <label for="username">Username:</label>
@@ -17,7 +17,59 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <button type="submit">Log In</button>
+            
+
         </form>
+        <p id="message"></p>
     </div>
+<script>
+    const form = document.getElementById("login-form");
+
+    form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+            // 4. Get username and password
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // 5. Send username and password to FastAPI
+            const response = await fetch("/login", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+
+                body: new URLSearchParams({
+                    username: username,
+                    password: password
+                })
+            });
+
+            // 6. Convert FastAPI response to JavaScript object
+            const data = await response.json();
+
+            // 7. Check whether login was successful
+            if (response.ok) {
+
+                // 8. Store JWT in browser
+                localStorage.setItem("access_token", data.access_token);
+
+                // 9. Move user to task page
+                window.location.href = "/";
+
+            } else {
+
+                // 10. Show error
+                document.getElementById("message").textContent =
+                    data.detail || "Login failed";
+
+            }
+
+        });
+
+    </script>
+
 </body>
 </html>   
+
